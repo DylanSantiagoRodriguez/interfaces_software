@@ -1,90 +1,150 @@
-"use client";
-import { useState } from "react";
+'use client'; // Esto es necesario porque usaremos hooks y estado
 
-interface Message {
-  role: "user" | "assistant";
-  content: string;
-}
+import { useState, useRef, useEffect } from 'react';
+import {Mistral} from '@mistralai/mistralai';
 
 export default function Chatbot() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
-  const [isOpen, setIsOpen] = useState(false); // Nuevo estado para controlar visibilidad
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<Array<{role: string, content: string}>>([]);
+  const [input, setInput] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  // Configura el cliente de Mistral (usa tu API key)
+  const apiKey = process.env. MISTRAL_API_KEY || '';
+  const client = new Mistral({apiKey: apiKey});
 
-  const sendMessage = async () => {
+  const toggleChat = () => setIsOpen(!isOpen);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSendMessage = async () => {
     if (!input.trim()) return;
 
-    const userMessage: Message = { role: "user", content: input };
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
+    // Agrega el mensaje del usuario
+    const userMessage = { role: 'user', content: input };
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
 
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      body: JSON.stringify({ message: input }),
-      headers: { "Content-Type": "application/json" },
-    });
+    try {
+      // Obtiene la respuesta de Mistral AI
+      const response = await client.chat({
+        model: 'mistral-tiny',
+        messages: [...messages, userMessage],
+      });
 
-    const data = await res.json();
-    const botMessage: Message = { role: "assistant", content: data.message };
-    setMessages((prev) => [...prev, botMessage]);
+      // Agrega la respuesta del asistente
+      const assistantMessage = {
+        role: 'assistant',
+        content: response.choices[0]?.message?.content || 'No pude generar una respuesta.'
+      };
+      setMessages(prev => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error('Error calling Mistral AI:', error);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: 'Lo siento, hubo un error al procesar tu mensaje.'
+      }]);
+    }
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50"> {/* Contenedor flotante */}
-      {isOpen ? (
-        <div className="w-80 bg-[#e8fff9] rounded-lg shadow-xl border border-gray-200">
-          <div className="flex justify-between items-center p-4 bg-[#42af92] rounded-t-lg">
-            <h1 className="text-lg font-bold text-white">Chat with AI</h1>
-            <button 
-              onClick={() => setIsOpen(false)}
-              className="text-white hover:text-gray-200"
-            >
-              ×
+    <div className="fixed bottom-6 right-6 z-50">
+      {/* Botón del chatbot */}
+      <button
+        onClick={toggleChat}
+        className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all duration-300"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+          />
+        </svg>
+      </button>
+
+      {/* Ventana del chat */}
+      {isOpen && (
+        <div className="absolute bottom-16 right-0 w-80 h-96 bg-white rounded-lg shadow-xl flex flex-col border border-gray-200">
+          {/* Encabezado */}
+          <div className="bg-blue-600 text-white p-3 rounded-t-lg flex justify-between items-center">
+            <h3 className="font-semibold">Asistente Mistral AI</h3>
+            <button onClick={toggleChat} className="text-white hover:text-gray-200">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
             </button>
           </div>
-          <div className="h-64 overflow-y-auto bg-white p-4 text-black">
-            {messages.length > 0 ? (
+
+          {/* Área de mensajes */}
+          <div className="flex-1 p-4 overflow-y-auto">
+            {messages.length === 0 ? (
+              <div className="text-center text-gray-500 mt-10">
+                ¡Hola! ¿En qué puedo ayudarte hoy?
+              </div>
+            ) : (
               messages.map((msg, index) => (
-                <div 
-                  key={index} 
-                  className={`mb-2 ${msg.role === "user" ? "text-right" : "text-left"}`}
+                <div
+                  key={index}
+                  className={`mb-3 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}
                 >
-                  <strong className={msg.role === "user" ? "text-blue-600" : "text-green-600"}>
-                    {msg.role}:
-                  </strong> 
-                  <p className="mt-1">{msg.content}</p>
+                  <div
+                    className={`inline-block px-4 py-2 rounded-lg ${
+                      msg.role === 'user'
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-200 text-gray-800'
+                    }`}
+                  >
+                    {msg.content}
+                  </div>
                 </div>
               ))
-            ) : (
-              <p className="text-center text-gray-500">Start a conversation...</p>
             )}
+            <div ref={messagesEndRef} />
           </div>
-          <div className="flex p-4 bg-white border-t">
-            <input
-              type="text"
-              placeholder="Ask something..."
-              className="flex-1 p-2 border border-gray-300 rounded-md text-black"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-            />
-            <button 
-              className="ml-2 p-2 bg-[#42af92] text-white rounded-md hover:bg-[#368f77]"
-              onClick={sendMessage}
-            >
-              Send
-            </button>
+
+          {/* Entrada de mensaje */}
+          <div className="p-3 border-t border-gray-200">
+            <div className="flex">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                placeholder="Escribe tu mensaje..."
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                onClick={handleSendMessage}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg"
+              >
+                Enviar
+              </button>
+            </div>
           </div>
         </div>
-      ) : (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="p-4 bg-[#42af92] text-white rounded-full shadow-lg hover:bg-[#368f77] transition-all"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          </svg>
-        </button>
       )}
     </div>
   );

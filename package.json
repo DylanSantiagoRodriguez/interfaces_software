@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "lucide-react": "^0.486.0",
+    "ollama": "^0.5.14"
+  }
+}

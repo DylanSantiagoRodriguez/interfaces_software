@@ -19,7 +19,7 @@ export default function Home() {
     <div className="relative min-h-screen bg-white text-black"> {/* Añadido relative aquí */}
       <div className="p-6"> {/* Contenedor de padding separado */}
         <header className="flex justify-between items-center pb-4 border-b">
-          <h1 className="text-2xl font-bold">Digital Library</h1>
+          <h1 className="text-2xl font-bold">Verso y Prosa</h1>
           <nav>
             <ul className="flex space-x-6">
               <li><a href="#" className="hover:underline">Home</a></li>
