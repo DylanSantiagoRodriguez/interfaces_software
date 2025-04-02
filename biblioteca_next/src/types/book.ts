@@ -34,15 +34,12 @@ export interface Book {
     language?: string;
   }
   
-  // Tipos para la API de Google Books (internos)
   interface GoogleBook {
     id: string;
     volumeInfo: {
       title: string;
       authors?: string[];
-      // ... (otros campos como en googleBooks.ts)
     };
-    // ... (otros campos)
   }
   
   export function isBook(value: any): value is Book {

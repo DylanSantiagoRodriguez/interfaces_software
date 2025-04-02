@@ -113,11 +113,7 @@ export function adaptGoogleBook(googleBook: GoogleBook): Book {
   };
 }
 
-/**
- * Función alternativa de búsqueda con parámetros estructurados
- * @param params Parámetros de búsqueda
- * @returns Promise con array de libros adaptados
- */
+
 export async function advancedBookSearch(params: BookSearchParams): Promise<Book[]> {
   const { query, maxResults = 20, startIndex = 0 } = params;
   return searchBooks(query, maxResults, startIndex);

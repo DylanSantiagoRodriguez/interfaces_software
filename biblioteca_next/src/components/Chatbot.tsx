@@ -1,4 +1,4 @@
-'use client'; // Esto es necesario porque usaremos hooks y estado
+'use client'; 
 
 import { useState, useRef, useEffect } from 'react';
 import {Mistral} from '@mistralai/mistralai';
@@ -9,7 +9,6 @@ export default function Chatbot() {
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
-  // Configura el cliente de Mistral (usa tu API key)
   const apiKey = process.env. MISTRAL_API_KEY || '';
   const client = new Mistral({apiKey: apiKey});
 
@@ -26,19 +25,16 @@ export default function Chatbot() {
   const handleSendMessage = async () => {
     if (!input.trim()) return;
 
-    // Agrega el mensaje del usuario
     const userMessage = { role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
 
     try {
-      // Obtiene la respuesta de Mistral AI
       const response = await client.chat({
         model: 'mistral-tiny',
         messages: [...messages, userMessage],
       });
 
-      // Agrega la respuesta del asistente
       const assistantMessage = {
         role: 'assistant',
         content: response.choices[0]?.message?.content || 'No pude generar una respuesta.'
@@ -55,10 +51,9 @@ export default function Chatbot() {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      {/* Botón del chatbot */}
       <button
         onClick={toggleChat}
-        className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all duration-300"
+        className="bg-[#42af92] hover:bg-[#42af92] text-white rounded-full p-4 shadow-lg transition-all duration-300"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -76,12 +71,10 @@ export default function Chatbot() {
         </svg>
       </button>
 
-      {/* Ventana del chat */}
       {isOpen && (
         <div className="absolute bottom-16 right-0 w-80 h-96 bg-white rounded-lg shadow-xl flex flex-col border border-gray-200">
-          {/* Encabezado */}
-          <div className="bg-blue-600 text-white p-3 rounded-t-lg flex justify-between items-center">
-            <h3 className="font-semibold">Asistente Mistral AI</h3>
+          <div className="bg-[#42af92] text-white p-3 rounded-t-lg flex justify-between items-center">
+            <h3 className="font-semibold">Bookie AI</h3>
             <button onClick={toggleChat} className="text-white hover:text-gray-200">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -98,7 +91,6 @@ export default function Chatbot() {
             </button>
           </div>
 
-          {/* Área de mensajes */}
           <div className="flex-1 p-4 overflow-y-auto">
             {messages.length === 0 ? (
               <div className="text-center text-gray-500 mt-10">
@@ -113,7 +105,7 @@ export default function Chatbot() {
                   <div
                     className={`inline-block px-4 py-2 rounded-lg ${
                       msg.role === 'user'
-                        ? 'bg-blue-500 text-white'
+                        ? 'bg-[#42af92] text-white'
                         : 'bg-gray-200 text-gray-800'
                     }`}
                   >
@@ -125,7 +117,6 @@ export default function Chatbot() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Entrada de mensaje */}
           <div className="p-3 border-t border-gray-200">
             <div className="flex">
               <input
@@ -134,13 +125,13 @@ export default function Chatbot() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                 placeholder="Escribe tu mensaje..."
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-4 py-2 border border-border-[#42af92] rounded-l-lg focus:outline-none focus:ring-2 focus:ring-border -[#42af92]"
               />
               <button
                 onClick={handleSendMessage}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg"
+                className="bg-[#42af92] hover:bg-[#42af92] text-white px-4 py-2 rounded-r-lg"
               >
-                Enviar
+                Send
               </button>
             </div>
           </div>
