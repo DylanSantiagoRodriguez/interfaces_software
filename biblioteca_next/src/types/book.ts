@@ -36,12 +36,13 @@ export interface Book {
   
 
   
-  export function isBook(value: any): value is Book {
-
+  export function isBook(value: unknown): value is Book {
+    if (typeof value !== 'object' || value === null) return false;
+  
+    const book = value as Partial<Book>;
     return (
-      value &&
-      typeof value.id === 'string' &&
-      typeof value.title === 'string' &&
-      typeof value.author === 'string'
+      typeof book.id === 'string' &&
+      typeof book.title === 'string' &&
+      typeof book.author === 'string'
     );
   }
