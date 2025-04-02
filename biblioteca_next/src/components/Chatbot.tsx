@@ -1,16 +1,12 @@
 'use client'; 
 
 import { useState, useRef, useEffect } from 'react';
-import {Mistral} from '@mistralai/mistralai';
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Array<{role: string, content: string}>>([]);
   const [input, setInput] = useState('');
-  const messagesEndRef = useRef<HTMLsectionElement>(null);
-  
-  const apiKey = process.env. MISTRAL_API_KEY || '';
-  const client = new Mistral({apiKey: apiKey});
+  const messagesEndRef = useRef<HTMLElement>(null);
 
   const toggleChat = () => setIsOpen(!isOpen);
 
@@ -22,31 +18,19 @@ export default function Chatbot() {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = () => {
     if (!input.trim()) return;
 
     const userMessage = { role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
 
-    try {
-      const response = await client.chat({
-        model: 'mistral-tiny',
-        messages: [...messages, userMessage],
-      });
-
-      const assistantMessage = {
-        role: 'assistant',
-        content: response.choices[0]?.message?.content || 'No pude generar una respuesta.'
-      };
-      setMessages(prev => [...prev, assistantMessage]);
-    } catch (error) {
-      console.error('Error calling Mistral AI:', error);
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: 'Lo siento, hubo un error al procesar tu mensaje.'
-      }]);
-    }
+    // Simulamos una respuesta automática del asistente
+    const assistantMessage = {
+      role: 'assistant',
+      content: 'Lo siento, hubo un error al procesar tu mensaje.'
+    };
+    setMessages(prev => [...prev, assistantMessage]);
   };
 
   return (
@@ -103,11 +87,7 @@ export default function Chatbot() {
                   className={`mb-3 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}
                 >
                   <section
-                    className={`inline-block px-4 py-2 rounded-lg ${
-                      msg.role === 'user'
-                        ? 'bg-[#42af92] text-white'
-                        : 'bg-gray-200 text-gray-800'
-                    }`}
+                    className={`inline-block px-4 py-2 rounded-lg ${msg.role === 'user' ? 'bg-[#42af92] text-white' : 'bg-gray-200 text-gray-800'}`}
                   >
                     {msg.content}
                   </section>
