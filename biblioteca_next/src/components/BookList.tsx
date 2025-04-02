@@ -9,13 +9,16 @@ interface Book {
     description?: string;
   };
 }
-
+interface BookListPropsDel {
+  books: Array<any>;
+  removeFromMyBooks: (bookId: string) => void;
+}
 interface BookListProps {
   books: Book[];
   addToMyBooks: (book: Book) => void;
 }
 
-export default function BookList({ books, addToMyBooks }: BookListProps) {
+export default function BookList({ books, addToMyBooks }: BookListProps, ) {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
   return (

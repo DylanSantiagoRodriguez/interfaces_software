@@ -32,7 +32,7 @@ export default function Home() {
           <nav>
             <ul className="flex space-x-6">
               <li><a href="#" className="hover:underline">Home</a></li>
-              <li><a href="#  " className="hover:underline">My Books</a></li>
+              <li><a href="#" className="hover:underline">My Books</a></li>
             </ul>
           </nav>
         </header>
