@@ -9,13 +9,13 @@ export default function ChatbotPage() {
   return (
     <main className="max-w-3xl mx-auto p-6">
       <h1 className="text-2xl font-bold">Chat with AI</h1>
-      <div className="h-80 overflow-y-auto bg-gray-100 p-4 rounded-md">
+      <section className="h-80 overflow-y-auto bg-gray-100 p-4 rounded-md">
         {messages.map((msg, index) => (
           <p key={index} className={msg.role === "user" ? "text-right" : "text-left"}>
             <strong>{msg.role}:</strong> {msg.content}
           </p>
         ))}
-      </div>
+      </section>
       <input
         className="w-full p-2 border rounded-md mt-4"
         placeholder="Ask something..."

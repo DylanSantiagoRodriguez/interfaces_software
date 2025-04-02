@@ -7,7 +7,7 @@ export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Array<{role: string, content: string}>>([]);
   const [input, setInput] = useState('');
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLsectionElement>(null);
   
   const apiKey = process.env. MISTRAL_API_KEY || '';
   const client = new Mistral({apiKey: apiKey});
@@ -50,7 +50,7 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <section className="fixed bottom-6 right-6 z-50">
       <button
         onClick={toggleChat}
         className="bg-[#42af92] hover:bg-[#42af92] text-white rounded-full p-4 shadow-lg transition-all duration-300"
@@ -72,8 +72,8 @@ export default function Chatbot() {
       </button>
 
       {isOpen && (
-        <div className="absolute bottom-16 right-0 w-80 h-96 bg-white rounded-lg shadow-xl flex flex-col border border-gray-200">
-          <div className="bg-[#42af92] text-white p-3 rounded-t-lg flex justify-between items-center">
+        <section className="absolute bottom-16 right-0 w-80 h-96 bg-white rounded-lg shadow-xl flex flex-col border border-gray-200">
+          <section className="bg-[#42af92] text-white p-3 rounded-t-lg flex justify-between items-center">
             <h3 className="font-semibold">Bookie AI</h3>
             <button onClick={toggleChat} className="text-white hover:text-gray-200">
               <svg
@@ -89,20 +89,20 @@ export default function Chatbot() {
                 />
               </svg>
             </button>
-          </div>
+          </section>
 
-          <div className="flex-1 p-4 overflow-y-auto">
+          <section className="flex-1 p-4 overflow-y-auto">
             {messages.length === 0 ? (
-              <div className="text-center text-gray-500 mt-10">
+              <section className="text-center text-gray-500 mt-10">
                 ¡Hola! ¿En qué puedo ayudarte hoy?
-              </div>
+              </section>
             ) : (
               messages.map((msg, index) => (
-                <div
+                <section
                   key={index}
                   className={`mb-3 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}
                 >
-                  <div
+                  <section
                     className={`inline-block px-4 py-2 rounded-lg ${
                       msg.role === 'user'
                         ? 'bg-[#42af92] text-white'
@@ -110,15 +110,15 @@ export default function Chatbot() {
                     }`}
                   >
                     {msg.content}
-                  </div>
-                </div>
+                  </section>
+                </section>
               ))
             )}
-            <div ref={messagesEndRef} />
-          </div>
+            <section ref={messagesEndRef} />
+          </section>
 
-          <div className="p-3 border-t border-gray-200">
-            <div className="flex">
+          <section className="p-3 border-t border-gray-200">
+            <section className="flex">
               <input
                 type="text"
                 value={input}
@@ -133,10 +133,10 @@ export default function Chatbot() {
               >
                 Send
               </button>
-            </div>
-          </div>
-        </div>
+            </section>
+          </section>
+        </section>
       )}
-    </div>
+    </section>
   );
 }

@@ -19,8 +19,8 @@ export default function MyBooks() {
   };
 
   return (
-    <div className="relative min-h-screen bg-white text-black">
-      <div className="p-6">
+    <section className="relative min-h-screen bg-white text-black">
+      <section className="p-6">
         <header className="flex justify-between items-center pb-4">
           <nav>
             <ul className="flex space-x-6">
@@ -47,7 +47,7 @@ export default function MyBooks() {
             )}
           </section>
         </main>
-      </div>
-    </div>
+      </section>
+    </section>
   );
 }

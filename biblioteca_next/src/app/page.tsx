@@ -26,8 +26,8 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-screen bg-white text-black">
-      <div className="p-6">
+    <section className="relative min-h-screen bg-white text-black">
+      <section className="p-6">
         <header className="flex justify-between items-center pb-4">
           <nav>
             <ul className="flex space-x-6">
@@ -43,14 +43,14 @@ export default function Home() {
 
           <section className="w-full mt-4">
             <h3 className="text-xl font-semibold text-left text-[#4e6660]" style={{ fontFamily: "'Bebas Neue', cursive" }}>Categories:</h3>
-            <div className="grid grid-cols-4 gap-4 mt-4">
+            <section className="grid grid-cols-4 gap-4 mt-4">
               {[
                 { title: "Action", desc: "Thrilling adventures and high-stakes stories" },
                 { title: "Adventure", desc: "Journey to new worlds and exciting places" },
                 { title: "Romance", desc: "Love stories that touch the heart" },
                 { title: "Fiction", desc: "Imaginative stories beyond reality" }
               ].map((category, index) => (
-                <div key={index} className="p-4 bg-[#e8fff9] rounded-lg shadow text-center">
+                <section key={index} className="p-4 bg-[#e8fff9] rounded-lg shadow text-center">
                   <h4
                     className="font-bold text-2xl text-[#4e6660]"
                     style={{ fontFamily: "'Bebas Neue', cursive" }}
@@ -64,9 +64,9 @@ export default function Home() {
                   >
                     Ver Populares
                   </button>
-                </div>
+                </section>
               ))}
-            </div>
+            </section>
           </section>
 
           <section className="mt-8 w-full">
@@ -76,10 +76,10 @@ export default function Home() {
             <BookList books={books} addToMyBooks={(book) => console.log("Added to My Books:", book)} />
           </section>
         </main>
-      </div>
-      <div className="min-h-screen bg-white">
+      </section>
+      <section className="min-h-screen bg-white">
         <Chatbot />
-      </div>
-    </div>
+      </section>
+    </section>
   );
 }

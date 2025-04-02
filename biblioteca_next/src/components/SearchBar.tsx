@@ -15,7 +15,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   };
 
   return (
-    <div className="flex items-center gap-2 p-4  rounded-lg">
+    <section className="flex items-center gap-2 p-4  rounded-lg">
       <input
         type="text"
         placeholder="Search for books..."
@@ -29,6 +29,6 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       >
         Search
       </button>
-    </div>
+    </section>
   );
 }
