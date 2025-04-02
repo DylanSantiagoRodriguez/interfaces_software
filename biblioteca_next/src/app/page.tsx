@@ -19,7 +19,7 @@ export default function Home() {
     <div className="relative min-h-screen bg-white text-black"> {/* Añadido relative aquí */}
       <div className="p-6"> {/* Contenedor de padding separado */}
         <header className="flex justify-between items-center pb-4 border-b">
-          <h1 className="text-2xl font-bold">Verso y Prosa</h1>
+          <h1 className="text-2xl font-bold">Versos y Prosa</h1>
           <nav>
             <ul className="flex space-x-6">
               <li><a href="#" className="hover:underline">Home</a></li>
@@ -51,7 +51,7 @@ export default function Home() {
           </section>
 
           <section className="mt-8 w-full">
-            <h3 className="text-xl font-semibold text-center">Popular This Week</h3>
+            <h3 className="text-xl font-semibold text-left">Search Results</h3>
             <BookList books={books} />
           </section>
         </main>
