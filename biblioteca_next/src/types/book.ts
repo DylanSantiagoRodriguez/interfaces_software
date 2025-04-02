@@ -34,15 +34,10 @@ export interface Book {
     language?: string;
   }
   
-  interface GoogleBook {
-    id: string;
-    volumeInfo: {
-      title: string;
-      authors?: string[];
-    };
-  }
+
   
   export function isBook(value: any): value is Book {
+
     return (
       value &&
       typeof value.id === 'string' &&

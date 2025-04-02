@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from "next/image";
 
 interface Book {
   id: string;
@@ -9,10 +10,7 @@ interface Book {
     description?: string;
   };
 }
-interface BookListPropsDel {
-  books: Array<any>;
-  removeFromMyBooks: (bookId: string) => void;
-}
+
 interface BookListProps {
   books: Book[];
   addToMyBooks: (book: Book) => void;
@@ -34,7 +32,7 @@ export default function BookList({ books, addToMyBooks }: BookListProps, ) {
             >
               <section className="flex items-center gap-4">
                 {book.volumeInfo.imageLinks?.thumbnail && (
-                  <img
+                  <Image 
                     src={book.volumeInfo.imageLinks.thumbnail}
                     alt={book.volumeInfo.title}
                     className="w-16 h-24 object-cover rounded-md"
@@ -71,7 +69,7 @@ export default function BookList({ books, addToMyBooks }: BookListProps, ) {
           <section className="bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-[60%] flex gap-4">
             <section className="flex-shrink-0">
               {selectedBook.volumeInfo.imageLinks?.thumbnail && (
-                <img
+                <Image 
                   src={selectedBook.volumeInfo.imageLinks.thumbnail}
                   alt={selectedBook.volumeInfo.title}
                   className="w-32 h-48 object-cover rounded-md"

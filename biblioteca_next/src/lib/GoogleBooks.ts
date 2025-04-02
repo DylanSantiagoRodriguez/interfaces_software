@@ -3,10 +3,7 @@ import { Book, BookSearchParams } from '../types/book';
 const API_KEY = process.env.GOOGLE_BOOKS_API_KEY;
 const BASE_URL = 'https://www.googleapis.com/books/v1/volumes';
 
-interface GoogleBooksResponse {
-  items?: GoogleBook[];
-  totalItems?: number;
-}
+
 
 interface GoogleBook {
   id: string;
